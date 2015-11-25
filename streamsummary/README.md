@@ -1,0 +1,1 @@
+Implement Summary#ofStream() method so that SummaryTest passes.
