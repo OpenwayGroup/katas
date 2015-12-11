@@ -199,15 +199,18 @@ public class ResourcePoolTest {
                 try {
                     for (;;) {
                         Resource resource = pool.acquire();
-                        try {
-                            assertNotNull(resource);
-                            int currentCount = acquiredResourceCounter.incrementAndGet();
-                            if (currentCount > numberOfResources) {
-                                fail(currentCount + " resources were acquired at the same time");
-                            }
-                        } finally {
-                            acquiredResourceCounter.decrementAndGet();
-                            pool.release(resource);
+                        int currentCount = acquiredResourceCounter.incrementAndGet();
+                        Thread.yield();
+                        acquiredResourceCounter.decrementAndGet();
+                        pool.release(resource);
+
+                        assertNotNull(resource);
+                        if (currentCount > numberOfResources) {
+                            fail(currentCount + " resources were acquired at the same time");
+                        }
+
+                        if (Thread.currentThread().isInterrupted()) {
+                            throw new InterruptedException();
                         }
                     }
                 } catch (InterruptedException e) {
