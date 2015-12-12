@@ -1,1 +1,1 @@
-Implement methods of ResourcePool so that ResourcePoolTest passes.
+Implement methods of ResourcePoolImpl so that ResourcePoolTest passes.

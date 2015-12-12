@@ -17,7 +17,7 @@ public class ResourcePoolTest {
     }
 
     private static <R> ResourcePool<R> poolOf(Collection<? extends R> resources) {
-        return new ResourcePool<>(Collections.unmodifiableCollection(resources));
+        return new ResourcePoolImpl<>(Collections.unmodifiableCollection(resources));
     }
 
     @Test
