@@ -223,11 +223,14 @@ public class ResourcePoolTest {
             testThreads.add(thread);
         }
 
-        testThreads.iterator().next().join(1000);
+        Thread.sleep(1000);
 
         for (Thread thread : testThreads) {
             assertTrue(thread.isAlive());
             thread.interrupt();
+        }
+
+        for (Thread thread : testThreads) {
             thread.join();
         }
 
