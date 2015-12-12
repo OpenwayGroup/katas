@@ -1,27 +1,29 @@
 import java.util.Collection;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class ResourcePoolImpl<R> implements ResourcePool<R> {
 
+    private final BlockingQueue<R> resources;
+
     public ResourcePoolImpl(Collection<? extends R> resources) {
+        this.resources = new ArrayBlockingQueue<>(resources.size(), false, resources);
     }
 
-    @Override
     public R acquire() throws InterruptedException {
-        return null;
+        return resources.take();
     }
 
-    @Override
     public R acquire(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        return null;
+        return resources.poll(timeout, timeUnit);
     }
 
-    @Override
     public R tryAcquire() {
-        return null;
+        return resources.poll();
     }
 
-    @Override
     public void release(R resource) {
+        resources.add(resource);
     }
 }
