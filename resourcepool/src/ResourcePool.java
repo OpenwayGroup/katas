@@ -1,10 +1,11 @@
-import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-public class ResourcePool<R> {
-
-    public ResourcePool(Collection<? extends R> resources) {
-    }
+/**
+ * A pool of resources that can be safely acquired and released by multiple threads.
+ *
+ * @param <R> type of resource managed by the pool
+ */
+public interface ResourcePool<R> {
 
     /**
      * Returns a spare resource from the pool.
@@ -14,9 +15,7 @@ public class ResourcePool<R> {
      * @return resource from the pool
      * @throws InterruptedException if wait is interrupted
      */
-    public R acquire() throws InterruptedException {
-        return null;
-    }
+    public R acquire() throws InterruptedException;
 
     /**
      * Returns a spare resource from the pool.
@@ -28,24 +27,19 @@ public class ResourcePool<R> {
      * @return resource from the pool, or {@code null} if no resource became available within timeout
      * @throws InterruptedException if wait is interrupted
      */
-    public R acquire(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        return null;
-    }
+    public R acquire(long timeout, TimeUnit timeUnit) throws InterruptedException;
 
     /**
      * Immediately returns a spare resource from the pool, or {@code null} if no resource is available.
      *
      * @return resource from the pool
      */
-    public R tryAcquire() {
-        return null;
-    }
+    public R tryAcquire();
 
     /**
      * Releases a previously acquired resource.
      *
      * @param resource    resource
      */
-    public void release(R resource) {
-    }
+    public void release(R resource);
 }

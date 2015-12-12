@@ -17,7 +17,7 @@ public class ResourcePoolTest {
     }
 
     private static <R> ResourcePool<R> poolOf(Collection<? extends R> resources) {
-        return new ResourcePool<>(Collections.unmodifiableCollection(resources));
+        return new ResourcePoolImpl<>(Collections.unmodifiableCollection(resources));
     }
 
     @Test
@@ -199,15 +199,18 @@ public class ResourcePoolTest {
                 try {
                     for (;;) {
                         Resource resource = pool.acquire();
-                        try {
-                            assertNotNull(resource);
-                            int currentCount = acquiredResourceCounter.incrementAndGet();
-                            if (currentCount > numberOfResources) {
-                                fail(currentCount + " resources were acquired at the same time");
-                            }
-                        } finally {
-                            acquiredResourceCounter.decrementAndGet();
-                            pool.release(resource);
+                        int currentCount = acquiredResourceCounter.incrementAndGet();
+                        Thread.yield();
+                        acquiredResourceCounter.decrementAndGet();
+                        pool.release(resource);
+
+                        assertNotNull(resource);
+                        if (currentCount > numberOfResources) {
+                            fail(currentCount + " resources were acquired at the same time");
+                        }
+
+                        if (Thread.currentThread().isInterrupted()) {
+                            throw new InterruptedException();
                         }
                     }
                 } catch (InterruptedException e) {
@@ -220,11 +223,14 @@ public class ResourcePoolTest {
             testThreads.add(thread);
         }
 
-        testThreads.iterator().next().join(1000);
+        Thread.sleep(1000);
 
         for (Thread thread : testThreads) {
             assertTrue(thread.isAlive());
             thread.interrupt();
+        }
+
+        for (Thread thread : testThreads) {
             thread.join();
         }
 
