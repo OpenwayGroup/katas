@@ -5,7 +5,7 @@ This should happen as soon as possible.
 You can confirm that the program is in deadlock by taking a thread dump.
 Successful deadlock of 3 threads looks like this (irrelevant parts omitted):
 
-
+```
 Found one Java-level deadlock:
 =============================
 "Thread-2":
@@ -40,3 +40,4 @@ Java stack information for the threads listed above:
 	at java.lang.Thread.run(Thread.java:745)
 
 Found 1 deadlock.
+```
