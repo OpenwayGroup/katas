@@ -65,4 +65,13 @@ public class BulkArrayTest {
         assertEquals(null, a.get(1));
     }
 
+    @Test(timeout = 2000)
+    public void testStess() {
+        BulkArray<Integer> a = new BulkArrayImpl<>(1024 * 1024 + 1);
+        for (int i = 0; i < 1024 * 1024; i++) {
+            a.set(i, i);
+            a.setAll(i + 1);
+        }
+    }
+
 }
