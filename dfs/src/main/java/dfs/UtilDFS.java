@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static com.google.common.base.Joiner.on;
+
 public class UtilDFS {
 
     // TODO implement
@@ -15,6 +17,11 @@ public class UtilDFS {
 
     static abstract class AbstractCycleException extends RuntimeException {
         public abstract List<Object> getCycle();
+
+        @Override
+        public String getMessage() {
+            return "Cycle found: " + on(" -> ").join(getCycle());
+        }
     }
 
 }
